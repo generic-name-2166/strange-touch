@@ -1,6 +1,6 @@
 [package]
 name = "strange-touch"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 publish = false
 
@@ -10,7 +10,7 @@ clap = { version = "4.5", features = ["derive"] }
 color-eyre = "0.6"
 
 [dependencies.windows]
-version = "0.59"
+version = "0.61"
 features = [
     "Win32_Foundation", 
     "Win32_Storage_FileSystem",
@@ -27,37 +27,8 @@ all = { level = "warn", priority = -1 }
 cargo = { level = "warn", priority = -1 }
 nursery = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }
-restriction = { level = "deny", priority = -1 }
 
-single_call_fn = { level = "allow", priority = 1 }  # God function
-too_many_lines = { level = "allow", priority = 1 }  # No, I don't think so
-module_name_repetitions = { level = "allow", priority = 1 }  # This is annoying
-multiple_crate_versions = { level = "allow", priority = 1 }  # Can't do anything about it
-struct_excessive_bools = { level = "allow", priority = 1 }  # I know what I'm doing
-
-question_mark_used = { level = "allow", priority = 1 }  # Idek
-implicit_return = { level = "allow", priority = 1 }  #  Not even idiomatic
-missing_docs_in_private_items = { level = "allow", priority = 1 }  # This is an application
-indexing_slicing = { level = "allow", priority = 1 }  # There are assert checks (hopefully)
-unreachable = { level = "allow", priority = 1 }  # unreachable
-ref_patterns = { level = "allow", priority = 1 }  # `ref` and `&` don't actually behave the same way
-exhaustive_enums = { level = "allow", priority = 1 }  # This is an application
-exhaustive_structs = { level = "allow", priority = 1 }  # This is an application
-redundant_type_annotations = { level = "allow", priority = 1 }  # rust-analyzer takes up the space of shorter code anyway
-arithmetic_side_effects = { level = "allow", priority = 1 }  # It's fine, the operations are not that large
-wildcard_enum_match_arm = { level = "allow", priority = 1 }  # In the places it's used, there are too many arms to list them all
-pattern_type_mismatch = { level = "allow", priority = 1 }  # I don't understand what it wants from me
-self_named_module_files = { level = "allow", priority = 1 }  # Old standard
-panic_in_result_fn = { level = "allow", priority = 1 }  # I know what I'm doing
-unwrap_used = { level = "allow", priority = 1 }  # I would like to see the original error
-separated_literal_suffix = { level = "allow", priority = 1 }  # Choosing to have underscores
-missing_trait_methods = { level = "allow", priority = 1 }  # I can't be bothered
-blanket_clippy_restriction_lints = { level = "allow", priority = 1 }  # Easier to disable undesired than enable the rest
-arbitrary_source_item_ordering = { level = "allow" }  # Idc enough to configure this
-renamed_function_params = { level = "allow" }  # It complains about min_ident_chars otherwise
-
-print_stdout = { level = "allow", priority = 1 }  # This is a CLI
-
-integer_division  = { level = "allow", priority = 1 }  # Too much effort for floats
-integer_division_remainder_used = { level = "allow", priority = 1 }  # Not cryptography
-shadow_reuse = { level = "allow", priority = 1 }  # raw pointers...
+single_call_fn = { level = "allow", priority = 1 }
+too_many_lines = { level = "allow", priority = 1 }
+module_name_repetitions = { level = "allow", priority = 1 }
+multiple_crate_versions = { level = "allow", priority = 1 }
