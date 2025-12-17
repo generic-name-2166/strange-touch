@@ -4,9 +4,9 @@ use std::{
     path::PathBuf,
 };
 
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::{DateTime, Utc};
 use clap::Parser;
-use color_eyre::eyre::{self, OptionExt as _};
+use eros::Context;
 use windows::Win32::{
     Foundation::{FILETIME, HANDLE},
     Storage::FileSystem::SetFileTime,
@@ -30,16 +30,21 @@ fn set_filetime(handle: HANDLE, datetime: DateTime<Utc>) {
     let filetime: FILETIME = datetime_to_filetime(datetime);
     // SAFETY:
     // it's a windows API, god knows what it's doing
-    unsafe { SetFileTime(handle, Some(&filetime), None, Some(&filetime)) }.unwrap();
+    unsafe {
+        SetFileTime(
+            handle,
+            Some(&raw const filetime),
+            None,
+            Some(&raw const filetime),
+        )
+    }
+    .unwrap();
 }
 
-fn parse_date(date_string: &str) -> eyre::Result<DateTime<Utc>> {
-    let datetime: DateTime<Utc> =
-        match NaiveDateTime::parse_from_str(date_string, "%Y-%m-%d %H:%M:%S") {
-            Err(error) => Err(eyre::eyre!("failure to parse {} - {}", date_string, error)),
-            Ok(ok) => Ok(ok),
-        }?
-        .and_utc();
+fn parse_date(date_string: &str) -> eros::Result<DateTime<Utc>> {
+    let datetime: DateTime<Utc> = DateTime::parse_from_rfc3339(date_string)
+        .map_err(|err: chrono::ParseError| eros::traced!("{}", err))?
+        .to_utc();
     Ok(datetime)
 }
 
@@ -56,15 +61,15 @@ fn datetime_to_filetime(datetime: DateTime<Utc>) -> FILETIME {
     }
 }
 
-fn main() -> eyre::Result<()> {
+fn main() -> eros::Result<()> {
     let args: CliArgs = CliArgs::parse();
 
     let datetime = match (args.timestamp, args.datetime) {
         (Some(secs), _) => {
-            DateTime::from_timestamp(secs, 0).ok_or_eyre("provided timestamp is invalid")
+            DateTime::from_timestamp(secs, 0).context("provided timestamp is invalid")
         }
         (None, Some(date_string)) => parse_date(&date_string),
-        _ => Err(eyre::eyre!("provide either --timestamp or --datetime")),
+        _ => Err(eros::traced!("provide either --timestamp or --datetime")),
     }?;
 
     let file: File = OpenOptions::new().write(true).open(args.path)?;

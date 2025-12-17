@@ -15,5 +15,5 @@ Options:
   -h, --help                   Print help
   -V, --version                Print version
 
-$ strange-touch ./file.txt -d '2025-11-07 22:00:00'
+$ strange-touch ./file.txt -d '2025-11-07T22:00:0+00:00'
 ```
